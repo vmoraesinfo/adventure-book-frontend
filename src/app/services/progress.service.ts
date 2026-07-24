@@ -18,7 +18,6 @@ export class ProgressService {
         const headers = new HttpHeaders({'Content-Type': 'application/json'});
         return this.http.post<Progress>('http://localhost:8080/progress', progress, { headers }).pipe(
         tap((savedProgress: Progress) => {
-          
           this.progressId = savedProgress.id ? undefined : savedProgress.id;
         }));
     }

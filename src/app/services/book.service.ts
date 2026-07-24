@@ -43,7 +43,7 @@ export class BookService {
       this._health.update((h) => Math.min(10, h + consequence.value));
     }
 
-    if (this._health() === 0) return; // player died
+    if (this._health() === 0) return; 
 
     const book = this._activeBook();
     if (!book || gotoId === null) return;
