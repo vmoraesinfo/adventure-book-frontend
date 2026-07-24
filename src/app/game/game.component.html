@@ -1,0 +1,59 @@
+<div class="game-page">
+  <!-- Header -->
+  <header class="game-header">
+    <button class="back-btn" (click)="goBack()">← Back to Library</button>
+
+    <div class="book-title">
+      <span>📖</span>
+      <span>{{ bookService.activeBook()?.title }}</span>
+    </div>
+
+    <div class="header-right">
+      <div class="hearts">
+        <span *ngFor="let full of hearts()" [class.full]="full" [class.empty]="!full">♥</span>
+      </div>
+      <button class="save-btn" (click)="saveProgress()">💾 Save Progress</button>
+    </div>
+  </header>
+
+  <!-- Dead State -->
+  <div *ngIf="isDead()" class="end-state death">
+    <h2>💀 You Died</h2>
+    <p>Your health reached zero. The adventure is over.</p>
+    <button class="begin-btn" (click)="goBack()">Return to Library</button>
+  </div>
+
+  <!-- Ending State -->
+  <div *ngIf="!isDead() && isEnding()" class="end-state victory">
+    <h2>🏆 Adventure Complete!</h2>
+    <p>{{ bookService.currentSection()?.text }}</p>
+    <button class="begin-btn" (click)="goBack()">Return to Library</button>
+  </div>
+
+  <!-- Main Content -->
+  <main *ngIf="!isDead() && !isEnding()" class="game-content">
+    <h2 class="section-title">{{ bookService.currentSection()?.title }}</h2>
+
+    <div class="story-text">
+      <p *ngFor="let para of bookService.currentSection()?.text?.split('\n\n')">{{ para }}</p>
+    </div>
+
+    <div class="choices">
+      <p class="choices-label">What do you choose?</p>
+      <div
+        *ngFor="let choice of bookService.currentSection()?.options; let i = index"
+        class="choice-card"
+        (click)="makeChoice(choice)"
+      >
+        <span class="choice-num">{{ i + 1 }}</span>
+        <div class="choice-body">
+          <p class="choice-label">{{ choice.description }}</p>
+          <p *ngIf="choice.consequence" class="choice-hint">
+            ⚠ {{ choice.consequence.text }}
+          </p>
+          <span *ngIf="choice.tag" class="choice-tag">{{ choice.tag }}</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
