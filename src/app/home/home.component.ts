@@ -34,10 +34,11 @@ export class HomeComponent {
   get allFilters(): string[] {
         const books = this.bookService.books();
         const filters = books.flatMap((b) =>{
-            const t = b.tags.map((t: { name: string }) => t.name);
-            const c = b.category.name;
-            const diff = b.difficulty;
-            return [...t, c, diff];
+
+            const t = b.tags?.map((t: { name: string }) => t.name) || [];
+            const c = b.category?.name || '';
+            const diff = b.difficulty || '';
+            return [...t, c, diff].filter((f) => f !== '');
       });
 
         return Array.from(new Set(filters)).sort() as string[];

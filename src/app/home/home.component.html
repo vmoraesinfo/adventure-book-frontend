@@ -53,7 +53,7 @@
 
       <div class="badges">
         <span class="badge" [ngClass]="difficultyColors[book.difficulty] || 'badge-default'">{{ book.difficulty }}</span>
-        <span class="badge" [ngClass]="categoryColors[book.category.name] || 'badge-default'">{{ book.category.name }}</span>
+        <span class="badge" [ngClass]="categoryColors[book.category?.name] || 'badge-default'">{{ book.category?.name || 'Uncategorized' }}</span>
     </div>
         
 

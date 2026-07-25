@@ -30,10 +30,10 @@ export class BookService {
       this._currentSection.set(section);
     } else {
       const begin = book.sections.find((s) => s.type === 'BEGIN') ?? book.sections[0];
-      this._activeBook.set(book);
       this._currentSection.set(begin);
       this._health.set(20);
     }
+     this._activeBook.set(book);
   }
 
   makeChoice(gotoId: number | null, consequence?: { type: string; value: number; text: string }): void {
@@ -42,7 +42,6 @@ export class BookService {
     } else if (consequence?.type === 'GAIN_HEALTH') {
       this._health.update((h) => Math.min(10, h + consequence.value));
     }
-
     if (this._health() === 0) return; 
 
     const book = this._activeBook();

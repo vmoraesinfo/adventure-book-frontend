@@ -1,7 +1,7 @@
 export interface Choice {
   id: number;
   description: string;
-  gotoId: number | null;
+  goToId: number | null;
   consequence?: {
     type: 'LOSE_HEALTH' | 'GAIN_HEALTH';
     value: number;

@@ -25,7 +25,7 @@ export class GameComponent {
   constructor(public bookService: BookService, private progressService: ProgressService, private router: Router) {}
 
   makeChoice(choice: Choice): void {
-    this.bookService.makeChoice(choice.gotoId, choice.consequence);
+    this.bookService.makeChoice(choice.goToId, choice.consequence);
   }
 
   goBack(): void {
@@ -39,6 +39,6 @@ export class GameComponent {
       bookId: this.bookService.activeBook()?.id ?? '',
       life: this.bookService.health(),
     };
-     this.progressService.saveProgress(progress);
+     this.progressService.saveProgress(progress).subscribe();
   }
 }
