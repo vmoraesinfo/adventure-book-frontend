@@ -1,10 +1,12 @@
-import { Component, computed } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgFor, NgIf } from '@angular/common';
 import { BookService } from '../services/book.service';
 import { Choice } from '../models/book.model';
 import { ProgressService } from '../services/progress.service';
 import { Progress } from '../models/progress.model';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent, ConfirmDialogData } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-game',
@@ -17,6 +19,9 @@ export class GameComponent {
   hearts = computed(() =>
     Array.from({ length: 10 }, (_, i) => i < this.bookService.health())
   );
+
+  private dialog = inject(MatDialog);
+
 
   isDead = computed(() => this.bookService.health() === 0);
 
@@ -39,6 +44,23 @@ export class GameComponent {
       bookId: this.bookService.activeBook()?.id ?? '',
       life: this.bookService.health(),
     };
-     this.progressService.saveProgress(progress).subscribe();
+     this.progressService.saveProgress(progress).subscribe({
+        next: (data) => {
+           this.dialog.open(ConfirmDialogComponent, {
+                  data: {
+                    title: 'Success',
+                    message: "Progress saved successfully.", 
+                  } as ConfirmDialogData,
+                });
+        },
+        error: (err) => {
+            this.dialog.open(ConfirmDialogComponent, {
+                  data: {
+                    title: 'Error',
+                    message: "Failed to save progress.", 
+                  } as ConfirmDialogData,
+                });
+        }
+    });
   }
 }
