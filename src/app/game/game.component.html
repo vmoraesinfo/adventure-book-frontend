@@ -48,10 +48,6 @@
         <span class="choice-num">{{ i + 1 }}</span>
         <div class="choice-body">
           <p class="choice-label">{{ choice.description }}</p>
-          <p *ngIf="choice.consequence" class="choice-hint">
-            ⚠ {{ choice.consequence.text }}
-          </p>
-          <span *ngIf="choice.tag" class="choice-tag">{{ choice.tag }}</span>
         </div>
       </div>
     </div>
