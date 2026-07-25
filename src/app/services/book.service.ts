@@ -1,6 +1,8 @@
-import { Injectable, resource, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Book, ResponseBook, Section } from '../models/book.model';
 import { Progress } from '../models/progress.model';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ConfirmDialogComponent, ConfirmDialogData } from '../confirm-dialog/confirm-dialog.component';
 
   
 
@@ -13,8 +15,9 @@ export class BookService {
   private _books = signal<Book[]>(books.content);
   private _activeBook = signal<Book | null>(null);
   private _currentSection = signal<Section | null>(null);
-  private _health = signal<number>(20);
+  private _health = signal<number>(10);
 
+   private dialog = inject(MatDialog);
 
 
   readonly books = this._books.asReadonly();
@@ -24,6 +27,7 @@ export class BookService {
 
 
   startGame(book: Book,progress: Progress | null): void {
+    console.log('Starting game with book:', book, 'and progress:', progress);
     if (progress) {
       this._health.set(progress.life);
       const section = book.sections.find((s) => s.id === progress.sectionId) ?? book.sections[0];
@@ -31,17 +35,30 @@ export class BookService {
     } else {
       const begin = book.sections.find((s) => s.type === 'BEGIN') ?? book.sections[0];
       this._currentSection.set(begin);
-      this._health.set(20);
+      this._health.set(10);
     }
      this._activeBook.set(book);
   }
 
   makeChoice(gotoId: number | null, consequence?: { type: string; value: number; text: string }): void {
     if (consequence?.type === 'LOSE_HEALTH') {
+      this.dialog.open(ConfirmDialogComponent, {
+        data: {
+          title: 'Warning',
+          message: "You lost " + consequence.value + " health points. " + consequence.text, 
+        } as ConfirmDialogData,
+      });
       this._health.update((h) => Math.max(0, h - consequence.value));
     } else if (consequence?.type === 'GAIN_HEALTH') {
+     this.dialog.open(ConfirmDialogComponent, {
+        data: {
+          title: 'Good news',
+          message: "You gained " + consequence.value + " health points. " + consequence.text,
+        } as ConfirmDialogData,
+      });
       this._health.update((h) => Math.min(10, h + consequence.value));
     }
+
     if (this._health() === 0) return; 
 
     const book = this._activeBook();

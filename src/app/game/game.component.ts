@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgFor, NgIf } from '@angular/common';
 import { BookService } from '../services/book.service';
@@ -15,7 +15,7 @@ import { Progress } from '../models/progress.model';
 })
 export class GameComponent {
   hearts = computed(() =>
-    Array.from({ length: 20 }, (_, i) => i < this.bookService.health())
+    Array.from({ length: 10 }, (_, i) => i < this.bookService.health())
   );
 
   isDead = computed(() => this.bookService.health() === 0);
