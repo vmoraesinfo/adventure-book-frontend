@@ -34,9 +34,8 @@ export class HomeComponent {
   get allFilters(): string[] {
         const books = this.bookService.books();
         const filters = books.flatMap((b) =>{
-
             const t = b.tags?.map((t: { name: string }) => t.name) || [];
-            const c = b.category?.name || '';
+            const c = b.category || '';
             const diff = b.difficulty || '';
             return [...t, c, diff].filter((f) => f !== '');
       });
@@ -51,7 +50,7 @@ export class HomeComponent {
       const filters = this.activeFilters();
       return this.bookService.books().filter((b) => {
         const matchSearch = !q || b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q);
-        const matchFilter = filters.length === 0 || filters.some((f) => b.difficulty.includes(f) || b.tags.map((tag: { name: string }) => tag.name).includes(f) || b.category.name.includes(f));
+        const matchFilter = filters.length === 0 || filters.some((f) => b.difficulty.includes(f) || b.tags.map((tag: { name: string }) => tag.name).includes(f) || b.category.includes(f));
         return matchSearch && matchFilter;
       });
     });

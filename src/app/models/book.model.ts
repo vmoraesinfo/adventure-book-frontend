@@ -25,16 +25,13 @@ export interface Book {
   description: string;
   difficulty: string;
   tags: tag[];
-  category: category;
+  category: string;
   chapters: number;
   sections: Section[];
   valid?: boolean;
 }
 
 interface tag {
-  name: string;
-}
-interface category {
   name: string;
 }
 export interface ResponseBook {
